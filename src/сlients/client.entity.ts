@@ -1,9 +1,9 @@
 
+import Order from 'src/orders/order.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -25,5 +25,6 @@ export class Client {
 
   @CreateDateColumn()
   created_at: Date;
+
 
 }

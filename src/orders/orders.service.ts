@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { DatasourceService } from 'src/datasource/datasource.service';
-import { Order } from '../entities/order.entity';
+import { Order } from './order.entity';
 
 @Injectable()
 export class OrdersService {
@@ -17,7 +17,7 @@ export class OrdersService {
 
     findOrderByClientId(clientId: number) {
         return this.datasourceService.getOrders()
-        .find((order) => order.clientId === clientId);
+        .find((order) => order.client_id === clientId);
     }
     findAll(): Order[] {
         return this.datasourceService.getOrders();

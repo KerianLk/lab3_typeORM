@@ -8,14 +8,14 @@ import {
     ManyToMany,
     Column,
   } from 'typeorm';
-import { Client } from './client.entity';
-import { Product } from './product.entity';
+import { Client } from '../сlients/client.entity';
+import { Product } from '../products/product.entity';
   
   @Entity('orders')
  export class Order {
     @PrimaryGeneratedColumn('uuid')
     id: number;
-    
+
     @OneToOne(() => Client)
     @JoinColumn({ name: 'client_id' })
     client: Client;

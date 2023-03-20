@@ -8,7 +8,7 @@ import {
     ManyToMany,
     JoinTable,
   } from 'typeorm';
-import Order from './order.entity';
+import Order from '../orders/order.entity';
   
   
   @Entity('products')
@@ -20,7 +20,7 @@ export class Product {
     name: string;
   
     @Column('decimal')
-    weight: number;
+    quantity: number;
   
     @Column('int')
     price: number;

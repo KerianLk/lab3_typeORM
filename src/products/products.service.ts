@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { DatasourceService } from 'src/datasource/datasource.service';
-import { Product } from '../entities/product.entity';
+import { Product } from './product.entity';
 
 @Injectable()
 export class ProductsService {

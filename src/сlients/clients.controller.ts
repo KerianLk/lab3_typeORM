@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { Client } from '../entities/client.entity';
+import { Client } from './client.entity';
 import { ClientsService } from './clients.service';
 
 
@@ -17,6 +17,12 @@ export class ClientsController {
   findOne(@Param('id') id: string){
     return this.clientsService.findOne(+id);
   }
+  
+  //@Get('incomplete')
+  //findIncomplete(){
+  //  return this.clientsService.findIncomplete();
+  //}
+
 
   @Put(':id')
   update(@Param('id') id: string, @Body() updatedClient: Client){

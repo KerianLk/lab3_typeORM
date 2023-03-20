@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Client } from 'src/entities/client.entity';
-import { Product } from 'src/entities/product.entity';
-import { Order } from 'src/entities/order.entity';
+import { Client } from 'src/сlients/client.entity';
+import { Product } from 'src/products/product.entity';
+import { Order } from 'src/orders/order.entity';
 
 @Injectable()
 export class DatasourceService {
