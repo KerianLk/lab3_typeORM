@@ -1,5 +1,5 @@
-import Product from "src/products/product.entity";
-import { Client } from "src/сlients/client.entity";
+import Product from "src/products/entities/product.entity";
+import { Client } from "src/сlients/entities/client.entity";
 
 export class CreateOrderDto {
   client: Client;

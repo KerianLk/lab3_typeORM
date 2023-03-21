@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { Order } from './order.entity';
+import { Order } from './entities/order.entity';
 import { OrdersService } from './orders.service';
 
 

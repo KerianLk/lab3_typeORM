@@ -1,12 +1,12 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DatasourceService } from 'src/datasource/datasource.service';
-import Order from 'src/orders/order.entity';
-import { Client } from 'src/сlients/client.entity';
+import Order from 'src/orders/entities/order.entity';
+import { Client } from 'src/сlients/entities/client.entity';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductQuantityDTO} from './dto/update-product.dto';
-import { Product } from './product.entity';
+import { Product } from './entities/product.entity';
 
 @Injectable()
 export class ProductsService {
@@ -16,7 +16,7 @@ export class ProductsService {
         @InjectRepository(Order)
         private readonly orderRepository: Repository<Order>,
         @InjectRepository(Product)
-        private readonly productRepository: Repository<Product>
+        private productRepository: Repository<Product>
         ) {}
 
    async create(productDto: CreateProductDto): Promise<Product>{

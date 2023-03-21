@@ -1,10 +1,10 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DatasourceService } from 'src/datasource/datasource.service';
-import Order from 'src/orders/order.entity';
+import Order from 'src/orders/entities/order.entity';
 import { create } from 'ts-node';
 import { In, Repository } from 'typeorm';
-import { Client } from './client.entity';
+import { Client } from './entities/client.entity';
 import { CreateClientDto } from './dto/client.dto';
 import { IncompleteClientDto } from './dto/incomplete-client.dto';
 

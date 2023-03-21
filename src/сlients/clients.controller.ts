@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { Client } from './client.entity';
+import { Client } from './entities/client.entity';
 import { ClientsService } from './clients.service';
 
 import { ApiOperation, ApiTags } from '@nestjs/swagger';

@@ -8,8 +8,8 @@ import {
     ManyToMany,
     Column,
   } from 'typeorm';
-import { Client } from '../сlients/client.entity';
-import { Product } from '../products/product.entity';
+import { Client } from '../../сlients/entities/client.entity';
+import { Product } from '../../products/entities/product.entity';
   
   @Entity('orders')
  export class Order {

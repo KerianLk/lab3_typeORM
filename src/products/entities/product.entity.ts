@@ -8,10 +8,10 @@ import {
     ManyToMany,
     JoinTable,
   } from 'typeorm';
-import Order from '../orders/order.entity';
+import {Order} from '../../orders/entities/order.entity';
   
   
-  @Entity('products')
+@Entity('products')
 export class Product {
     @PrimaryGeneratedColumn('uuid')
     id: number;
