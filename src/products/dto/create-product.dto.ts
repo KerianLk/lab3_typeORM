@@ -1,6 +1,7 @@
-export class CreateClientDto {
+export class CreateProductDto {
     name: string;
-    price: string;
-    quantity: string;
+    price: number;
+    quantity: number;
+    type: string;
   }
   

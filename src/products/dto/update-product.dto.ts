@@ -1,4 +1,4 @@
-export class UpdateProductsQuantityDTO {
+export class UpdateProductQuantityDTO {
     id: string;
     quantity: number;
   }

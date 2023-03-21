@@ -1,42 +1,75 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { DatasourceService } from 'src/datasource/datasource.service';
+import Product from 'src/products/product.entity';
+import { Client } from 'src/сlients/client.entity';
+import { In, Repository } from 'typeorm';
+import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './order.entity';
 
 @Injectable()
 export class OrdersService {
-    constructor (private readonly datasourceService: DatasourceService) {}
-    create (order: Order) {
-        this.datasourceService.getOrders().push(order);
+    constructor (
+        @InjectRepository(Client)
+        private readonly clientRepository: Repository<Client>,
+        @InjectRepository(Order)
+        private readonly orderRepository: Repository<Order>,
+        @InjectRepository(Product)
+        private readonly productRepository: Repository<Product>
+        ) {}
+
+    async create(orderDto: CreateOrderDto): Promise<Order>{
+        const order = this.orderRepository.create();
+
+        order.client = orderDto.client;
+        order.cost = orderDto.cost;
+        order.status = orderDto.status;
+
+        const products = await this.productRepository.findBy({
+            id: In(orderDto.products),
+        });
+
+        order.products = products;
+
+        await this.orderRepository.save(order);
         return order;
     }
 
-    findOne(id: number) {
-        return this.datasourceService.getOrders()
-        .find((order) => order.id === id);
+    async findOne(id: number): Promise<Order> {
+        const order = await this.orderRepository.findOne({
+            where: { id },
+            relations: {
+                products: true,
+                client: true,
+            },
+        });
+        return order;
     }
 
-    findOrderByClientId(clientId: number) {
-        return this.datasourceService.getOrders()
-        .find((order) => order.client_id === clientId);
-    }
-    findAll(): Order[] {
-        return this.datasourceService.getOrders();
+     async findAll(): Promise<Order[]> {
+        const orders = await this.orderRepository.find({
+            relations: {
+                products: true,
+                client: true,
+            },
+        });
+        return orders; 
     }
 
-    update(id: number, updatedOrder: Order) {
-        const index = this.datasourceService.getOrders()
-        .findIndex((order) => order.id === id);
-        this.datasourceService.getOrders()[index] = updatedOrder;
+    async update(id: number, updatedOrder: Order) {
+        const order = await this.orderRepository.findOne({ where: { id }});
 
-        return this.datasourceService.getOrders()[index];
+        order.status = updatedOrder.status;
+        order.cost =updatedOrder.cost;
+        order.client = updatedOrder.client;
+        order.products = updatedOrder.products;
+
+        await this.orderRepository.save(order);
+        return order;
     }
 
     remove(id: number) {
-        const index = this.datasourceService.getOrders()
-        .findIndex((order) => order.id === id);
-        this.datasourceService.getOrders().splice(index, 1);
-
-        return HttpStatus.OK;
+        this.orderRepository.delete({ id});
     }
 
 }

@@ -1,6 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DatasourceService } from 'src/datasource/datasource.service';
+import Order from 'src/orders/order.entity';
 import { create } from 'ts-node';
 import { In, Repository } from 'typeorm';
 import { Client } from './client.entity';
@@ -11,14 +12,20 @@ import { IncompleteClientDto } from './dto/incomplete-client.dto';
 export class ClientsService {
     constructor(
         @InjectRepository(Client)
-        private readonly clientRepository: Repository<Client>) {}
+        private readonly clientRepository: Repository<Client>,
+        @InjectRepository(Client)
+        private readonly orderRepository: Repository<Order>) {}
     
     async create(clientDto: CreateClientDto): Promise<Client>{
-        //получаем объект CreateAuthorDto
-        const client = this.clientRepository.create(); //создаем объект Author из репозитория
-        client.fullname = clientDto.fullname; //заполняем поля объекта Author
+        
+        const client = this.clientRepository.create(); 
+        client.fullname = clientDto.fullname; 
         client.email = clientDto.email;
         client.phone = clientDto.phone;
+
+        const orders = await this.orderRepository.findBy({
+            id: In(clientDto.orders),
+        });
         await this.clientRepository.save(client); 
         return client; 
     }
@@ -44,20 +51,19 @@ export class ClientsService {
         return incompleteClients; 
     }
 
-    update(id: number, updatedClient: Client) {
-        const index = this.datasourceService.getClients()
-        .findIndex((client) => client.id === id);
-        this.datasourceService.getClients()[index] = updatedClient;
+    async update(id: number, updatedClient: Client) {
+        const client = await this.clientRepository.findOne({ where: { id }});
 
-        return this.datasourceService.getClients()[index];
+        client.fullname = updatedClient.fullname;
+        client.email = updatedClient.email;
+        client.phone = updatedClient.phone;
+
+        await this.clientRepository.save(client);
+        return client;
     }
 
     remove(id: number) {
-        const index = this.datasourceService.getClients()
-        .findIndex((client) => client.id === id);
-        this.datasourceService.getClients().splice(index, 1);
-
-        return HttpStatus.OK;
+        this.clientRepository.delete({ id });
     }
 
 }

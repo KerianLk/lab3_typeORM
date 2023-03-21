@@ -1,39 +1,76 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { DatasourceService } from 'src/datasource/datasource.service';
+import Order from 'src/orders/order.entity';
+import { Client } from 'src/сlients/client.entity';
+import { Repository } from 'typeorm';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductQuantityDTO} from './dto/update-product.dto';
 import { Product } from './product.entity';
 
 @Injectable()
 export class ProductsService {
-    constructor (private readonly datasourceService: DatasourceService) {}
+    constructor (
+        @InjectRepository(Client)
+        private readonly clientRepository: Repository<Client>,
+        @InjectRepository(Order)
+        private readonly orderRepository: Repository<Order>,
+        @InjectRepository(Product)
+        private readonly productRepository: Repository<Product>
+        ) {}
 
-    create (product: Product) {
-        this.datasourceService.getProducts().push(product);
+   async create(productDto: CreateProductDto): Promise<Product>{
+        const product = this.productRepository.create();
+
+        product.name = productDto.name;
+        product.price = productDto.price;
+        product.type = productDto.type;
+        product.quantity = productDto.quantity;
+
+        await this.productRepository.save(product);
         return product;
     }
 
-    findOne(id: number) {
-        return this.datasourceService.getProducts()
-        .find((product) => product.id === id);
+    async findOne(id: number): Promise<Product> {
+        const findProduct = await this.productRepository.findOne({
+          where: {id},
+          relations:{
+            orders: true
+          },
+        }); 
+        return findProduct;
     }
 
-    findAll(): Product[] {
-        return this.datasourceService.getProducts();
+    async findAll(): Promise<Product[]> {
+        const products = await this.productRepository.find({
+            relations:{
+                orders: true
+            },
+        }); 
+        return products;
     }
 
-    update(id: number, updatedProduct: Product) {
-        const index = this.datasourceService.getProducts()
-        .findIndex((product) => product.id === id);
-        this.datasourceService.getProducts()[index] = updatedProduct;
+    async updateQuantity(id:number, productDto: UpdateProductQuantityDTO): Promise<Product> {
+        const product =await this.productRepository.findOne({ where: {id}});
+        product.quantity = productDto.quantity;
+        return product;
+    }
 
-        return this.datasourceService.getProducts()[index];
+    async update(id: number, updatedProduct: Product) {
+        const product = await this.productRepository.findOne({ where: { id }});
+
+        product.name = updatedProduct.name;
+        product.price = updatedProduct.price;
+        product.type = updatedProduct.type;
+        product.quantity = updatedProduct.quantity;
+        product.orders = updatedProduct.orders;
+
+        await this.productRepository.save(product);
+        return product;
     }
 
     remove(id: number) {
-        const index = this.datasourceService.getProducts()
-        .findIndex((product) => product.id === id);
-        this.datasourceService.getProducts().splice(index, 1);
-
-        return HttpStatus.OK;
+        this.productRepository.delete({ id});
     }
 
 }

@@ -2,9 +2,13 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { Client } from './client.entity';
 import { ClientsService } from './clients.service';
 
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CreateClientDto } from './dto/client.dto';
+
 
 
 @Controller('clients')
+@ApiTags('Клиенты')
 export class ClientsController {
   constructor(private readonly clientsService: ClientsService) {}
 
@@ -18,10 +22,10 @@ export class ClientsController {
     return this.clientsService.findOne(+id);
   }
   
-  //@Get('incomplete')
-  //findIncomplete(){
-  //  return this.clientsService.findIncomplete();
-  //}
+  @Get('incomplete')
+  findIncomplete(){
+    return this.clientsService.findIncomplete();
+  }
 
 
   @Put(':id')
@@ -29,8 +33,9 @@ export class ClientsController {
     return this.clientsService.update(+id, updatedClient);
   }
 
+  @ApiOperation({ summary: 'Создание клиента' })
   @Post()
-  create(@Body() createClient: Client){
+  create(@Body() createClient: CreateClientDto){
     return this.clientsService.create(createClient);
   }
 
