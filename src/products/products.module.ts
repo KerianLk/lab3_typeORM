@@ -13,7 +13,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 @Module({
   imports: [
     DatasourceModule,
-    TypeOrmModule.forFeature([Order, Product, Clientgit add --all]), 
+    TypeOrmModule.forFeature([Order, Product, Client]), 
   ],
   controllers: [ProductsController],
   providers: [ProductsService],

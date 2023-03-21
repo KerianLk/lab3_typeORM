@@ -10,7 +10,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ProductsModule, 
     ClientsModule, 
     OrdersModule, 
-    DatasourceModule,
     TypeOrmModule.forRoot({
       type: 'postgres', //тип подключаемой БД
       port: 5432, //порт
@@ -20,6 +19,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       synchronize: false, //отключаем автосинхронизацию(в противном случае при каждом перезапуске наша БД будет создаваться заново)
       logging: 'all', //включим логирование для удобства отслеживания процессов
       entities: ['dist/**/*.entity{.ts,.js}'], //указываем путь к сущностям
+      autoLoadEntities: true,
     }),],
   controllers: [],
   providers: [],

@@ -13,7 +13,7 @@ export class ClientsService {
     constructor(
         @InjectRepository(Client)
         private readonly clientRepository: Repository<Client>,
-        @InjectRepository(Client)
+        @InjectRepository(Order)
         private readonly orderRepository: Repository<Order>) {}
     
     async create(clientDto: CreateClientDto): Promise<Client>{

@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DatasourceService } from 'src/datasource/datasource.service';
-import Order from 'src/orders/entities/order.entity';
+import {Order} from 'src/orders/entities/order.entity';
 import { Client } from 'src/сlients/entities/client.entity';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';

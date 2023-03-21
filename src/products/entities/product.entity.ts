@@ -3,8 +3,6 @@ import {
     Column,
     PrimaryGeneratedColumn,
     CreateDateColumn,
-    UpdateDateColumn,
-    OneToMany,
     ManyToMany,
     JoinTable,
   } from 'typeorm';
@@ -40,4 +38,4 @@ export class Product {
     created_at: Date;
   }
   
-  export default Product;
+  
