@@ -5,6 +5,7 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 
@@ -25,9 +26,11 @@ export class Client {
   @ApiProperty({ example: '7 (909) 777-77-77', description: 'Номер телефона' })
   @Column()
   phone: string;
-
+  
+  @ApiProperty({ example: '2023-03-28 19:44:18.326569', description: 'дата создания' })
   @CreateDateColumn()
   created_at: Date;
-
-
+  @ApiProperty({ example: '2023-03-28 19:44:18.326569', description: 'дата обновления' })
+  @UpdateDateColumn()
+  updatet_at: Date;
 }

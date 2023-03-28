@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DatasourceService } from 'src/datasource/datasource.service';
-import Order from 'src/orders/entities/order.entity';
+import {Order} from 'src/orders/entities/order.entity';
 import { create } from 'ts-node';
 import { In, Repository } from 'typeorm';
 import { Client } from './entities/client.entity';
@@ -43,10 +43,9 @@ export class ClientsService {
     async findIncomplete(): Promise<IncompleteClientDto[]> {
         const clients = await this.clientRepository.find(); 
         const incompleteClients: IncompleteClientDto[] = clients.map((client) => {
-          const incompleteAuthor = new IncompleteClientDto();
-          incompleteAuthor.id = client.id;
-          incompleteAuthor.fullName = client.fullname;
-          return incompleteAuthor;
+          const incompleteClient = new IncompleteClientDto();
+          incompleteClient.fullName = client.fullname;
+          return incompleteClient;
         });
         return incompleteClients; 
     }

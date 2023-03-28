@@ -1,8 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { DataSource } from 'typeorm';
 import { AppModule } from './app.module';
 
-async function bootstrap() {
+async function bootstrap(){
   const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
     .setTitle('Лабораторная работа №3')

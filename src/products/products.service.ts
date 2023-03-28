@@ -16,7 +16,7 @@ export class ProductsService {
         @InjectRepository(Order)
         private readonly orderRepository: Repository<Order>,
         @InjectRepository(Product)
-        private productRepository: Repository<Product>
+        private readonly productRepository: Repository<Product>
         ) {}
 
    async create(productDto: CreateProductDto): Promise<Product>{
@@ -50,14 +50,14 @@ export class ProductsService {
         return products;
     }
 
-    async updateQuantity(id:number, productDto: UpdateProductQuantityDTO): Promise<Product> {
-        const product =await this.productRepository.findOne({ where: {id}});
+    async updateQuantity(productDto: UpdateProductQuantityDTO): Promise<Product> {
+        const product =await this.productRepository.findOne({ where: {id: productDto.id}});
         product.quantity = productDto.quantity;
         return product;
     }
 
-    async update(id: number, updatedProduct: Product) {
-        const product = await this.productRepository.findOne({ where: { id }});
+    async update(updatedProduct: Product) {
+        const product = await this.productRepository.findOne({ where: { id: updatedProduct.id }});
 
         product.name = updatedProduct.name;
         product.price = updatedProduct.price;

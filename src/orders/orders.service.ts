@@ -46,6 +46,17 @@ export class OrdersService {
         return order;
     }
 
+    async findClosed(): Promise<Order[]> {
+        const orders = await this.orderRepository.find({
+            where: { status: "доставлен" },
+            relations: {
+                products: true,
+                client: true,
+            },
+        });
+        return orders;
+    }
+
      async findAll(): Promise<Order[]> {
         const orders = await this.orderRepository.find({
             relations: {

@@ -12,22 +12,26 @@ import { CreateClientDto } from './dto/client.dto';
 export class ClientsController {
   constructor(private readonly clientsService: ClientsService) {}
 
+  @ApiOperation({ summary: 'Все клиенты' })
   @Get()
   findAll(){
     return this.clientsService.findAll();
   }
 
+  @ApiOperation({ summary: 'Поиск по айди клиента' })
   @Get(':id')
   findOne(@Param('id') id: string){
     return this.clientsService.findOne(+id);
   }
   
+  @ApiOperation({ summary: 'Ограниченная информация о клиентах' })
   @Get('incomplete')
   findIncomplete(){
     return this.clientsService.findIncomplete();
   }
 
 
+  @ApiOperation({ summary: 'Обновление информации клиента (по идентификатору)' })
   @Put(':id')
   update(@Param('id') id: string, @Body() updatedClient: Client){
     return this.clientsService.update(+id, updatedClient);
@@ -39,6 +43,7 @@ export class ClientsController {
     return this.clientsService.create(createClient);
   }
 
+  @ApiOperation({ summary: 'Удаление клиента' })
   @Delete(':id')
   remove(@Param('id') id: string){
     return this.clientsService.remove(+id);
