@@ -1,5 +1,6 @@
 import {
     Entity,
+    OneToMany,
     PrimaryGeneratedColumn,
     CreateDateColumn,
     JoinTable,
@@ -8,6 +9,7 @@ import {
     ManyToMany,
     Column,
     UpdateDateColumn,
+    ManyToOne,
   } from 'typeorm';
 import { Client } from '../../сlients/entities/client.entity';
 import { Product } from '../../products/entities/product.entity';
@@ -22,8 +24,8 @@ export class Order {
   @ApiProperty({ example: '1', description: 'идентификатор заказчика' })
 
   
-  @OneToOne(() => Client)
-  @JoinColumn({ name: 'client_id' })
+  @ManyToOne(() => Client, (client) => client.orders)
+  @JoinColumn({name: 'client_id', referencedColumnName: "id"})
   client: Client;
 
   @ManyToMany((type) => Product, (product) => product.orders)

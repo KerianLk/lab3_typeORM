@@ -11,7 +11,7 @@ const ormConfig: DataSource = new DataSource({
   database: 'culinary',
   username: 'postgres',
   password: 'password123',
-  entities: [Order,Product,Client],
+  entities: ['dist/src/**/*.entity{.ts,.js}'],
   synchronize: false,
   migrationsTableName: 'migrations',
   migrations: ['dist/src/migrations/*{.ts,.js}'],

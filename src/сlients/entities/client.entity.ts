@@ -1,13 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-
+import { ApiProperty } from "@nestjs/swagger";
+import { Order } from "src/orders/entities/order.entity";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
 
 @Entity('clients')
 export class Client {
@@ -22,6 +15,9 @@ export class Client {
   @ApiProperty({ example: 'i_i@mail.ru', description: 'email' })
   @Column()
   email: string;
+
+  @OneToMany(() => Order, order => order.client)
+  orders: Order[];
 
   @ApiProperty({ example: '7 (909) 777-77-77', description: 'Номер телефона' })
   @Column()
