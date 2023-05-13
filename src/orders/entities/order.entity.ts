@@ -21,9 +21,7 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ApiProperty({ example: '1', description: 'идентификатор заказчика' })
-
-  
+  @ApiProperty({ type: () => Client, example: '1', description: 'идентификатор заказчика' })  
   @ManyToOne(() => Client, (client) => client.orders)
   @JoinColumn({name: 'client_id', referencedColumnName: "id"})
   client: Client;
