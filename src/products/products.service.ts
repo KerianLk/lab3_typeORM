@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductQuantityDTO} from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
+import { IncompleteProductDto } from './dto/incomplete-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -39,6 +40,16 @@ export class ProductsService {
           },
         }); 
         return findProduct;
+    }
+
+    async findIncomplete(): Promise<IncompleteProductDto[]> {
+        const products = await this.productRepository.find(); 
+        const incompleteProducts: IncompleteProductDto[] = products.map((product) => {
+          const incompleteProduct = new IncompleteProductDto();
+          incompleteProduct.name = product.name;
+          return incompleteProduct;
+        });
+        return incompleteProducts; 
     }
 
     async findAll(): Promise<Product[]> {

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './entities/order.entity';
@@ -24,8 +24,9 @@ export class OrdersController {
   }
 
   @ApiOperation({ summary: 'Все закрытые (доставленные) заказы' })
-  @Get(':доставленные')
-  findClosed(status: 'доставлен'){
+  @Get(':deleviried')
+  findClosed(@Param('status') status: string){
+    status = "доставлен"
     return this.ordersService.findClosed(status);
   }
 
@@ -37,6 +38,7 @@ export class OrdersController {
 
   @ApiOperation({ summary: 'Создание записи о заказе' })
   @Post()
+  @UsePipes(new ValidationPipe())
   create(@Body() createOrder: CreateOrderDto){
     return this.ordersService.create(createOrder);
   }

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductQuantityDTO } from './dto/update-product.dto';
@@ -11,7 +11,7 @@ import { ProductsService } from './products.service';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @ApiOperation({ summary: 'Все продукты (товары, которые есть в наличие кулинарии)' })
+  @ApiOperation({ summary: 'Все продукты (товары, которые есть в наличии кулинарии)' })
   @Get()
   findAll(){
     return this.productsService.findAll();
@@ -23,8 +23,15 @@ export class ProductsController {
     return this.productsService.findOne(+id);
   }
 
+  @ApiOperation({ summary: 'Ограниченная информация о товарах' })
+  @Get('incomplete')
+  findIncomplete(){
+    return this.productsService.findIncomplete();
+  }
+
   @ApiOperation({ summary: 'Обновить информацию о количестве продуктов в наличии' })
   @Put('change_quantity')
+  @UsePipes(new ValidationPipe())
   updateQuantity(@Body()updatedProduct: UpdateProductQuantityDTO): Promise<Product>{
     return this.productsService.updateQuantity(updatedProduct);
   }
@@ -37,6 +44,7 @@ export class ProductsController {
 
   @ApiOperation({ summary: 'Создание товара' })
   @Post()
+  @UsePipes(new ValidationPipe())
   create(@Body() createProduct: CreateProductDto): Promise<Product>{
     return this.productsService.create(createProduct);
   }
