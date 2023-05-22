@@ -44,6 +44,7 @@ export class ClientsService {
         const clients = await this.clientRepository.find(); 
         const incompleteClients: IncompleteClientDto[] = clients.map((client) => {
           const incompleteClient = new IncompleteClientDto();
+          incompleteClient.id = client.id;
           incompleteClient.fullName = client.fullname;
           return incompleteClient;
         });

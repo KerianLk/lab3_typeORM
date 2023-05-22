@@ -1,13 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Client } from './entities/client.entity';
 import { ClientsService } from './clients.service';
 
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { CreateClientDto } from './dto/client.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 
 
 @Controller('clients')
+@ApiSecurity("X-API-KEY", ["X-API-KEY"])
 @ApiTags('Клиенты')
 export class ClientsController {
   constructor(private readonly clientsService: ClientsService) {}
@@ -25,7 +27,7 @@ export class ClientsController {
   }
   
   @ApiOperation({ summary: 'Ограниченная информация о клиентах' })
-  @Get('incomplete')
+  @Get()
   findIncomplete(){
     return this.clientsService.findIncomplete();
   }
@@ -39,6 +41,8 @@ export class ClientsController {
 
   @ApiOperation({ summary: 'Создание клиента' })
   @Post()
+  @UseGuards(AuthGuard("api-key"))
+  @UsePipes(new ValidationPipe())
   create(@Body() createClient: CreateClientDto){
     return this.clientsService.create(createClient);
   }

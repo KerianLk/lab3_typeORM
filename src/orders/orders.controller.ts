@@ -24,10 +24,9 @@ export class OrdersController {
   }
 
   @ApiOperation({ summary: 'Все закрытые (доставленные) заказы' })
-  @Get(':deleviried')
-  findClosed(@Param('status') status: string){
-    status = "доставлен"
-    return this.ordersService.findClosed(status);
+  @Get('/closed')
+  findClosed(){
+    return this.ordersService.findClosed();
   }
 
   @ApiOperation({ summary: 'Обновление информации о заказе' })

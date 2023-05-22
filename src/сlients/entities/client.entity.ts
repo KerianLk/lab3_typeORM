@@ -26,7 +26,9 @@ export class Client {
   @ApiProperty({ example: '2023-03-28 19:44:18.326569', description: 'дата создания' })
   @CreateDateColumn()
   created_at: Date;
+
   @ApiProperty({ example: '2023-03-28 19:44:18.326569', description: 'дата обновления' })
   @UpdateDateColumn()
-  updatet_at: Date;
+  updated_at: Date;
+  
 }
