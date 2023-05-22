@@ -1,55 +1,91 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+  Res,
+} from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
+
 import { Client } from './entities/client.entity';
 import { ClientsService } from './clients.service';
-
-import { ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { CreateClientDto } from './dto/client.dto';
-import { AuthGuard } from '@nestjs/passport';
-
-
+import { CreateClientDto, LogInDto } from './dto/client.dto';
+import { RolesGuard } from './roles/guard';
+import { Roles } from 'src/сlients/roles/decorator';
+import { Role } from './entities/role.enum';
+import { Config } from 'src/config';
 
 @Controller('clients')
-@ApiSecurity("X-API-KEY", ["X-API-KEY"])
 @ApiTags('Клиенты')
 export class ClientsController {
-  constructor(private readonly clientsService: ClientsService) {}
+  constructor(private readonly clientsService: ClientsService) { }
+
+  @ApiOperation({ summary: 'Ограниченная информация о клиентах' })
+  @Get('incomplete')
+  @Roles(Role.ADMIN, Role.USER)
+  @UseGuards(RolesGuard)
+  findIncomplete() {
+    return this.clientsService.findIncomplete();
+  }
 
   @ApiOperation({ summary: 'Все клиенты' })
   @Get()
-  findAll(){
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  findAll() {
     return this.clientsService.findAll();
   }
 
   @ApiOperation({ summary: 'Поиск по айди клиента' })
   @Get(':id')
-  findOne(@Param('id') id: string){
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  findOne(@Param('id') id: string) {
     return this.clientsService.findOne(+id);
   }
-  
-  @ApiOperation({ summary: 'Ограниченная информация о клиентах' })
-  @Get()
-  findIncomplete(){
-    return this.clientsService.findIncomplete();
-  }
 
-
-  @ApiOperation({ summary: 'Обновление информации клиента (по идентификатору)' })
+  @ApiOperation({
+    summary: 'Обновление информации клиента (по идентификатору)',
+  })
   @Put(':id')
-  update(@Param('id') id: string, @Body() updatedClient: Client){
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  update(@Param('id') id: string, @Body() updatedClient: Client) {
     return this.clientsService.update(+id, updatedClient);
   }
 
   @ApiOperation({ summary: 'Создание клиента' })
   @Post()
-  @UseGuards(AuthGuard("api-key"))
-  @UsePipes(new ValidationPipe())
-  create(@Body() createClient: CreateClientDto){
+  create(@Body() createClient: CreateClientDto) {
     return this.clientsService.create(createClient);
+  }
+
+  @ApiOperation({ summary: 'Авторизация' })
+  @Post('log_in')
+  async logIn(
+    @Body() logInDto: LogInDto,
+    @Res({passthrough: true}) response: Response,
+  ) {
+    const token = await this.clientsService.logIn(logInDto);
+    response.cookie('token', token, {
+      expires: new Date(
+        Date.now() + Config.COOKIE_EXPIRE_DAYS * 24 * 60 * 60 * 7,
+      ),
+    });
+    return token;
   }
 
   @ApiOperation({ summary: 'Удаление клиента' })
   @Delete(':id')
-  remove(@Param('id') id: string){
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  remove(@Param('id') id: string) {
     return this.clientsService.remove(+id);
   }
 }
+

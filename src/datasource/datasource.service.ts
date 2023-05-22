@@ -5,18 +5,18 @@ import { Order } from 'src/orders/entities/order.entity';
 
 @Injectable()
 export class DatasourceService {
-    private products: Product[] = [];
-    private clients: Client[] = [];
-    private orders: Order[] = [];
+  private products: Product[] = [];
+  private clients: Client[] = [];
+  private orders: Order[] = [];
 
-    getProducts(): Product[] {
-        return this.products;
-    }
-    getClients(): Client[] {
-        return this.clients;
-    }
+  getProducts(): Product[] {
+    return this.products;
+  }
+  getClients(): Client[] {
+    return this.clients;
+  }
 
-    getOrders(): Order[] {
-        return this.orders;
-    }
+  getOrders(): Order[] {
+    return this.orders;
+  }
 }

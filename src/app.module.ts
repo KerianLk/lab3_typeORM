@@ -18,7 +18,7 @@ import { Client } from './сlients/entities/client.entity';
       autoLoadEntities: true,
       type: 'postgres', //тип подключаемой БД
       port: 5432, //порт
-      database: 'culinary',
+      database: 'culinaria',
       username: 'postgres', //имя пользователя
       password: 'password123', //пароль
       host: 'localhost', //хост, в нашем случае БД развернута локально

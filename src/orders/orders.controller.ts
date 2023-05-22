@@ -1,50 +1,70 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UsePipes,
+  ValidationPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './entities/order.entity';
 import { OrdersService } from './orders.service';
-
-
+import { RolesGuard } from 'src/сlients/roles/guard';
+import { Roles } from 'src/сlients/roles/decorator';
+import { Role } from '../сlients/entities/role.enum';
 
 @Controller('orders')
+@UseGuards(RolesGuard)
 @ApiTags('Заказы')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(private readonly ordersService: OrdersService) { }
+
+  @ApiOperation({ summary: 'Все закрытые (доставленные) заказы' })
+  @Get('delivered')
+  @Roles(Role.ADMIN)
+  findClosed() {
+    return this.ordersService.findClosed('доставлен');
+  }
 
   @ApiOperation({ summary: 'Все заказы' })
   @Get()
-  findAll(){
+  @Roles(Role.ADMIN)
+  findAll() {
     return this.ordersService.findAll();
   }
 
   @ApiOperation({ summary: 'Поиск по айди заказа' })
   @Get(':id')
-  findOne(@Param('id') id: string){
+  @Roles(Role.ADMIN)
+  findOne(@Param('id') id: string) {
     return this.ordersService.findOne(+id);
-  }
-
-  @ApiOperation({ summary: 'Все закрытые (доставленные) заказы' })
-  @Get('/closed')
-  findClosed(){
-    return this.ordersService.findClosed();
   }
 
   @ApiOperation({ summary: 'Обновление информации о заказе' })
   @Put(':id')
-  update(@Param('id') id: string, @Body() updatedOrder: Order){
+  @Roles(Role.ADMIN)
+  update(@Param('id') id: string, @Body() updatedOrder: Order) {
     return this.ordersService.update(+id, updatedOrder);
   }
 
   @ApiOperation({ summary: 'Создание записи о заказе' })
   @Post()
+  @Roles(Role.ADMIN)
   @UsePipes(new ValidationPipe())
-  create(@Body() createOrder: CreateOrderDto){
+  create(@Body() createOrder: CreateOrderDto) {
     return this.ordersService.create(createOrder);
   }
 
   @ApiOperation({ summary: 'Удаление заказа' })
   @Delete(':id')
-  remove(@Param('id') id: string){
+  @Roles(Role.ADMIN)
+  remove(@Param('id') id: string) {
     return this.ordersService.remove(+id);
   }
 }

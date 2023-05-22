@@ -9,10 +9,9 @@ import { ClientsService } from './clients.service';
 @Module({
   imports: [
     DatasourceModule,
-    TypeOrmModule.forFeature([Client, Order]), 
+    TypeOrmModule.forFeature([Client, Order]),
   ],
   controllers: [ClientsController],
   providers: [ClientsService],
 })
-export class ClientsModule {}
-
+export class ClientsModule { }

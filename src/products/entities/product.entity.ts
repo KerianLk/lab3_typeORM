@@ -6,6 +6,7 @@ import {
     CreateDateColumn,
     ManyToMany,
     JoinTable,
+    UpdateDateColumn,
   } from 'typeorm';
 import { Order } from '../../orders/entities/order.entity';
   
@@ -43,5 +44,12 @@ export class Product {
   @ApiProperty({ example: '2023-03-28 19:44:18.326569', description: 'дата создания' })
   @CreateDateColumn()
   created_at: Date;
+  
+  @ApiProperty({
+    example: '2023-03-28 19:44:18.326569',
+    description: 'дата обновления',
+  })
+  @UpdateDateColumn()
+  updated_at: Date;
 }
   
