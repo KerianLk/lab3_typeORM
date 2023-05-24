@@ -5,7 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from 'src/orders/entities/order.entity';
 import { In, Repository } from 'typeorm';
 import { Client } from './entities/client.entity';
-import { CreateClientDto, LogInDto } from './dto/client.dto';
+import { CreateClientDto } from './dto/client.dto';
+import { LogInDto } from "./dto/client-login.dto";
 import { IncompleteClientDto } from './dto/incomplete-client.dto';
 import { Config } from 'src/config';
 

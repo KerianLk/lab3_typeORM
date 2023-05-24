@@ -8,7 +8,8 @@ async function bootstrap() {
   app.enableCors();
   app.use(cookieParser());
   const config = new DocumentBuilder()
-    .setTitle('Лабораторная работа №3')
+    .setTitle('Кулинарный цех')
+    .setDescription('Веб-сервер для работы с клиентами, заказами и товарами кулинарного цеха, изготавливающего кондитерские изделия.')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);

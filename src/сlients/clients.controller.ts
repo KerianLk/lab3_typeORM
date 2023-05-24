@@ -14,7 +14,8 @@ import { Response } from 'express';
 
 import { Client } from './entities/client.entity';
 import { ClientsService } from './clients.service';
-import { CreateClientDto, LogInDto } from './dto/client.dto';
+import { CreateClientDto } from './dto/client.dto';
+import { LogInDto } from "./dto/client-login.dto";
 import { RolesGuard } from './roles/guard';
 import { Roles } from 'src/сlients/roles/decorator';
 import { Role } from './entities/role.enum';
@@ -27,15 +28,13 @@ export class ClientsController {
 
   @ApiOperation({ summary: 'Ограниченная информация о клиентах' })
   @Get('incomplete')
-  @Roles(Role.ADMIN, Role.USER)
-  @UseGuards(RolesGuard)
   findIncomplete() {
     return this.clientsService.findIncomplete();
   }
 
   @ApiOperation({ summary: 'Все клиенты' })
   @Get()
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.USER)
   @UseGuards(RolesGuard)
   findAll() {
     return this.clientsService.findAll();
@@ -43,7 +42,7 @@ export class ClientsController {
 
   @ApiOperation({ summary: 'Поиск по айди клиента' })
   @Get(':id')
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.USER)
   @UseGuards(RolesGuard)
   findOne(@Param('id') id: string) {
     return this.clientsService.findOne(+id);
